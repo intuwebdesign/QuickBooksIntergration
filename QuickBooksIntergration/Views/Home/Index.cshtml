@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("Authenticate", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmAuthorize", name = "frmfrmAuthorize" }))
+            {
+                <div class="input-group p-2">
+                    <button type="submit" id="btnAuthenicateIntuit" name="btnAuthenicateIntuit" class="btn btn-success">Authorize with Intuit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
