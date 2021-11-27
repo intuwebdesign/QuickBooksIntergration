@@ -1,14 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Web;
-using Intuit.Ipp.Core;
-using Intuit.Ipp.Data;
-using Intuit.Ipp.DataService;
 using Intuit.Ipp.OAuth2PlatformClient;
-using Intuit.Ipp.QueryFilter;
-using Intuit.Ipp.Security;
 using Newtonsoft.Json;
-using System.Linq;
 using SystemTask = System.Threading.Tasks.Task;
 
 namespace QuickBooksIntergration.Models.OAuth2ClientModel
@@ -37,50 +31,29 @@ namespace QuickBooksIntergration.Models.OAuth2ClientModel
             var file        = Path.Combine(dir, "intuitToken.json");
             string serilizeToken   = JsonConvert.SerializeObject(model);
             File.WriteAllText(file, serilizeToken);
+        }
 
-           
+        public static bool DoesIntuitTokenFileExist()
+        {
+            var dir = HttpContext.Current.Server.MapPath("~/IntuitToken");
+            var file = Path.Combine(dir, "intuitToken.json");
 
-            OAuth2RequestValidator oAuth2RequestValidator = new OAuth2RequestValidator(intuitResponse.AccessToken);
-            ServiceContext serviceContext = new ServiceContext(realmId: realmId, IntuitServicesType.QBO,oAuth2RequestValidator);
-            serviceContext.IppConfiguration.MinorVersion.Qbo = "62";
-            serviceContext.IppConfiguration.BaseUrl.Qbo = "https://sandbox-quickbooks.api.intuit.com/";
+            bool fileExists = File.Exists(file);
 
+            return fileExists;
+        }
 
-            QueryService<Customer> customerQueryService = new QueryService<Customer>(serviceContext);
+        public static TokenModel RetrieveToken()
+        {
+            var dir         = HttpContext.Current.Server.MapPath("~/IntuitToken");
+            var file        = Path.Combine(dir, "intuitToken.json");
 
-            DataService dataService = new DataService(serviceContext);
-
-
-            Customer customer = new Customer
+            using (StreamReader streamReader = new StreamReader(file))
             {
-                CompanyName = "Company Name",
-                DisplayName = "Display Name",
-                Title = "Mr",
-                FamilyName = "Family Name",
-                GivenName = "Given Name",
-                MiddleName = "Middle Name",
-                BillAddr = new PhysicalAddress
-                {
-                    Line1 = "Line 1",
-                    City = "Washington",
-                    CountrySubDivisionCode = "Tyne Wear",
-                    PostalCode = "NE36 9PP",
-                    Country = "United Kingdom"
-                },
-                PrimaryEmailAddr = new EmailAddress
-                {
-                    Address = "test@test.com"
-                },
-                PrimaryPhone = new TelephoneNumber
-                {
-                    FreeFormNumber = "+44191789456"
-                }
-            };
-
-            dataService.Add(customer);
-
-            //Sanity check that the customer was created.
-            Customer customerCount = customerQueryService.ExecuteIdsQuery("SELECT * FROM Customer WHERE PrimaryEmailAddr = 'test@test.com'").FirstOrDefault();
+                string json     = streamReader.ReadToEnd();
+                var token       = JsonConvert.DeserializeObject<TokenModel>(json);
+                return token;
+            }
         }
     }
 }

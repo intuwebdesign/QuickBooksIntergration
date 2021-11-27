@@ -1,0 +1,80 @@
+﻿@model QuickBooksIntergration.Models.CustomerModel.CustomerViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mt-5">
+            <h4>List Of Customers</h4>
+            @if (TempData["Status"] != null)
+            {
+                <p class="text-info p-3">@TempData["Status"]</p>
+            }
+            else
+            {
+                if (TempData["InvoiceNumber"] != null)
+                {
+                    <p class="text-success">@TempData["InvoiceNumber"]</p>
+                }
+                using (Html.BeginForm("NewCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmCustomer", name = "frmCustomer" }))
+                {
+                    @Html.LabelFor(x => x.CompanyName)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.CompanyName, new { Class = "form-control", Placeholder = "Company Name" })
+                    </div>
+                    @Html.LabelFor(x => x.Title)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.Title, new { Class = "form-control", Placeholder = "Title" })
+                    </div>
+                    @Html.LabelFor(x => x.GivenName)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.GivenName, new { Class = "form-control", Placeholder = "First name" })
+                    </div>
+                    @Html.LabelFor(x => x.MiddleName)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.MiddleName, new { Class = "form-control", Placeholder = "Middle name" })
+                    </div>
+                    @Html.LabelFor(x => x.FamilyName)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.FamilyName, new { Class = "form-control", Placeholder = "Family name" })
+                    </div>
+                    @Html.LabelFor(x => x.AddressLineOne)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.AddressLineOne, new { Class = "form-control", Placeholder = "Address" })
+                    </div>
+                    @Html.LabelFor(x => x.City)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.City, new { Class = "form-control", Placeholder = "City" })
+                    </div>
+                    @Html.LabelFor(x => x.County)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.County, new { Class = "form-control", Placeholder = "County/Region" })
+                    </div>
+                    @Html.LabelFor(x => x.PostCode)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.PostCode, new { Class = "form-control", Placeholder = "Post-Code/Zip" })
+                    </div>
+                    @Html.LabelFor(x => x.Country)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.Country, new { Class = "form-control", Placeholder = "Country" })
+                    </div>
+                    @Html.LabelFor(x => x.Email)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.Email, new { Class = "form-control", Placeholder = "Email" })
+                    </div>
+                    @Html.LabelFor(x => x.PhoneNumber)
+                    <div class="input-group p-2">
+                        @Html.TextBoxFor(x => x.PhoneNumber, new { Class = "form-control", Placeholder = "Phone number" })
+                    </div>
+                    <div class="input-group p-2">
+                        <button type="submit" class="btn btn-success">Create Invoice</button>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+
